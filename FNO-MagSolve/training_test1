@@ -1,0 +1,61 @@
+import h5py
+import numpy as np
+import scipy.ndimage as ndimage
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+
+def load_hdf5_data(file_path, dataset_name):
+    """Loads dataset from an HDF5 file."""
+    with h5py.File(file_path, 'r') as f:
+        data = f[dataset_name][:]
+    return data
+
+def preprocess_data(data):
+    """Applies Gaussian filtering, normalization, and basic calibration."""
+    # Denoising with Gaussian filter
+    denoised_data = ndimage.gaussian_filter(data, sigma=1)
+    
+    # Min-max normalization
+    scaler = MinMaxScaler()
+    normalized_data = scaler.fit_transform(denoised_data.reshape(-1, 1)).reshape(data.shape)
+    
+    # Basic calibration (offset correction)
+    calibrated_data = normalized_data - np.mean(normalized_data)
+    
+    return calibrated_data
+
+def real_to_k_space(data):
+    """Converts real-space data to k-space using FFT."""
+    k_space = np.fft.fftshift(np.fft.fft2(data))
+    return k_space
+
+def split_data(data, test_size=0.2, val_size=0.1):
+    """Splits data into training, validation, and test sets."""
+    train_data, test_data = train_test_split(data, test_size=test_size, random_state=42)
+    train_data, val_data = train_test_split(train_data, test_size=val_size/(1-test_size), random_state=42)
+    return train_data, val_data, test_data
+
+# Example usage
+if __name__ == "__main__":
+    file_path = "data.h5"  # Change to actual file path
+    dataset_name = "your_dataset"  # Change to actual dataset name
+    
+    raw_data = load_hdf5_data(file_path, dataset_name)
+    processed_data = preprocess_data(raw_data)
+    k_space_data = real_to_k_space(processed_data)
+    train_data, val_data, test_data = split_data(k_space_data)
+    
+    # Visualization
+    plt.figure(figsize=(12, 5))
+    plt.subplot(1, 2, 1)
+    plt.imshow(np.log(np.abs(k_space_data) + 1), cmap='gray')
+    plt.title("K-space Representation")
+    plt.subplot(1, 2, 2)
+    plt.imshow(processed_data, cmap='gray')
+    plt.title("Processed Real-space Data")
+    plt.show()
+
+    print(f"Training data shape: {train_data.shape}")
+    print(f"Validation data shape: {val_data.shape}")
+    print(f"Test data shape: {test_data.shape}")

@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chai Junction - Authentic Indian Chai & Snacks at TUM</title>
+    <style>
+        :root {
+            --primary: #D35400;
+            --secondary: #8E44AD;
+            --accent: #F39C12;
+            --light: #FCF5E9;
+            --dark: #2C3E50;
+            --text: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary);
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            margin-left: 0.5rem;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin: 0 1rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: white;
+            transition: width 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--light);
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background-color: white;
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/api/placeholder/1200/600');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 1rem;
+            margin-top: 4rem;
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.8rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        section {
+            padding: 5rem 0;
+        }
+        
+        h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary);
+            position: relative;
+            font-size: 2.5rem;
+        }
+        
+        h2::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+            margin: 1rem auto;
+        }
+        
+        .about {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 3rem;
+        }
+        
+        .about-image {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .about-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .about-text h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .about-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .about-feature-icon {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-right: 1rem;
+        }
+        
+        .menu-section {
+            background-color: white;
+        }
+        
+        .menu-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .menu-tab {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--light);
+            border: none;
+            border-radius: 50px;
+            margin: 0.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .menu-tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .menu-tab:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .menu-item {
+            background-color: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .menu-item-image {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .menu-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .menu-item:hover .menu-item-image img {
+            transform: scale(1.1);
+        }
+        
+        .menu-item-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .menu-item-info {
+            padding: 1.5rem;
+        }
+        
+        .menu-item-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .menu-item-title h3 {
+            font-size: 1.3rem;
+            color: var(--dark);
+        }
+        
+        .menu-item-price {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .menu-item-desc {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .menu-item-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .add-to-cart {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .add-to-cart:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        .rating {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+        
+        .favorites {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .favorite-item {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .favorite-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .favorite-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .favorite-item-info {
+            padding: 1.5rem;
+        }
+        
+        .favorite-item h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .testimonials {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 6rem 0;
+        }
+        
+        .testimonials h2 {
+            color: white;
+        }
+        
+        .testimonials h2::after {
+            background-color: white;
+        }
+        
+        .testimonial-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .testimonial {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+        
+        .testimonial-author {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .testimonial-role {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .location {
+            background-color: white;
+        }
+        
+        .location-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .location-map {
+            flex: 1;
+            min-width: 300px;
+            height: 400px;
+            background-color: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .location-map img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .location-details {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .location-details h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .location-item {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+        
+        .location-icon {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-right: 1rem;
+            min-width: 30px;
+        }
+        
+        .hours {
+            margin-top: 2rem;
+        }
+        
+        .hours h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .hours-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+        
+        .social-proof {
+            background-color: var(--light);
+            text-align: center;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .social-icon {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-5px);
+        }
+        
+        .instagram-feed {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .instagram-item {
+            height: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .instagram-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .instagram-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .instagram-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .instagram-item:hover .instagram-overlay {
+            opacity: 1;
+        }
+        
+        .instagram-icon {
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .app-download {
+            text-align: center;
+            background-color: var(--dark);
+            color: white;
+            padding: 6rem 0;
+        }
+        
+        .app-download h2 {
+            color: white;
+        }
+        
+        .app-download h2::after {
+            background-color: var(--accent);
+        }
+        
+        .app-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .app-text {
+            max-width: 500px;
+            text-align: left;
+        }
+        
+        .app-text h3 {
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .app-features {
+            margin: 2rem 0;
+        }
+        
+        .app-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .app-feature-icon {
+            color: var(--accent);
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .app-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .app-button {
+            display: inline-flex;
+            align-items: center;
+            background-color: black;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        
+        .app-button:hover {
+            transform: translateY(-5px);
+        }
+        
+        .app-button-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        
+        .app-button-text {
+            text-align: left;
+        }
+        
+        .app-button-text small {
+            display: block;
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+        
+        .app-button-text span {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .app-image {
+            max-width: 300px;
+        }
+        
+        .app-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .footer-column h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .footer-social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        
+        .footer-social-icon:hover {
+            background-color: var(--accent);
+        }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 3rem;
+        }
+        
+        .footer-bottom p {
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+        
+        .floating-cart {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--primary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+        
+        .floating-cart:hover {
+            background-color: var(--accent);
+            transform: translateY(-5px);
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--accent);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav {
+                position: fixed;
+                top: 4rem;
+                left: -100%;
+                width: 80%;
+                height: 100vh;
+                background-color: var(--primary);
+                padding: 2rem;
+                transition: left 0.3s;
+            }
+            
+            nav.active {
+                left: 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+            
+            nav ul li {
+                margin: 1rem 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            🍵 <span>Chai Junction</span>
+        </div>
+        <button class="mobile-menu-btn">☰</button>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">Our Story</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#location">Find Us</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="https://order.chaijunction.com" class="cta-button">Order Online</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="home" class="hero">
+        <h1>A Taste of Authentic India</h1>
+        <p>Experience the rich flavors of traditional Indian chai and street food</p>
+        <a href="#menu" class="btn">Explore Our Menu</a>
+    </section>
+    
+    <section id="about" class="container">
+        <h2>Our Story</h2>
+        <div class="about">
+            <div class="about-image">
+                <img src="/api/placeholder/600/400" alt="Authentic Indian Chai">
+            </div>
+            <div class="about-text">
+                <h3>Bringing India's Chai Culture to TUM</h3>
+                <p>Chai Junction was born from a simple desire: to introduce the rich, aromatic experience of authentic Indian chai to the vibrant community at Technical University of Munich.</p>
+                <p>Our recipes are passed down through generations, bringing you the genuine taste of Indian street corners where chai is more than just a beverage—it's a way of life.</p>
+                
+                <div class="about-feature">
+                    <div class="about-feature-icon">✦</div>
+                    <p><strong>Authentic Recipes</strong> - Using traditional spice blends imported from India</p>
+                </div>
+                <div class="about-feature">
+                    <div class="about-feature-icon">✦</div>
+                    <p><strong>Freshly Prepared</strong> - Each cup of chai is brewed to order</p>
+                </div>
+                <div class="about-feature">
+                    <div class="about-feature-icon">✦</div>
+                    <p><strong>Perfect Pairings</strong> - Complementary snacks that enhance your chai experience</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="menu" class="menu-section">
+        <div class="container">
+            <h2>Our Menu</h2>
+            <div class="menu-tabs">
+                <button class="menu-tab active">All</button>
+                <button class="menu-tab">Chai</button>
+                <button class="menu-tab">Snacks</button>
+                <button class="menu-tab">Seasonal</button>
+            </div>
+            
+            <div class="menu-items">
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="/api/placeholder/400/400" alt="Masala Chai">
+                        <span class="menu-item-badge">Popular</span>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-title">
+                            <h3>Masala Chai</h3>
+                            <span class="menu-item-price">€3.75</span>
+                        </div>
+                        <p class="menu-item-desc">Our signature chai brewed with a special blend of cardamom, ginger, cinnamon, and cloves. Rich, aromatic, and perfectly spiced.</p>
+                        <div class="menu-item-actions">
+                            <button class="add-to-cart">Add to Cart</button>
+                            <div class="rating">★★★★★ (124)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="/api/placeholder/400/400" alt="Ginger Chai">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-title">
+                            <h3>Ginger Chai</h3>
+                            <span class="menu-item-price">€3.00</span>
+                        </div>
+                        <p class="menu-item-desc">Strong chai infused with fresh ginger for that extra kick. Perfect for cold days or when you need an energy boost.</p>
+                        <div class="menu-item-actions">
+                            <button class="add-to-cart">Add to Cart</button>
+                            <div class="rating">★★★★☆ (86)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="/api/placeholder/400/400" alt="Samosa">
+                        <span class="menu-item-badge">Bestseller</span>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-title">
+                            <h3>Samosa</h3>
+                            <span class="menu-item-price">€6.00</span>
+                        </div>
+                        <p class="menu-item-desc">Crispy triangular pastry filled with spiced potatoes, peas, and aromatic Indian spices. Served with mint and tamarind chutneys.</p>
+                        <div class="menu-item-actions">
+                            <button class="add-to-cart">Add to Cart</button>
+                            <div class="rating">★★★★★ (152)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="/api/placeholder/400/400" alt="Vada Pav">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-title">
+                            <h3>Vada Pav</h3>
+                            <span class="menu-item-price">€7.50</span>
+                        </div>
+                        <p class="menu-item-desc">Mumbai's favorite street food - spicy potato fritter in a soft bun with chutneys and special spice mix. The Indian veggie burger!</p>
+                        <div class="menu-item-actions">
+                            <button class="add-to-cart">Add to Cart</button>
+                            <div class="rating">★★★★☆ (94)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="/api/placeholder/400/400" alt="Cutting Chai">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-title">
+                            <h3>Cutting Chai</h3>
+                            <span class="menu-item-price">€2.50</span>
+                        </div>
+                        <p class="menu-item-desc">Mumbai-style strong chai served in a small glass - perfect for a quick caffeine fix between classes or meetings.</p>
+                        <div class="menu-item-actions">
+                            <button class="add-to-cart">Add to Cart</button>
+                            <div class="rating">★★★★☆ (78)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="/api/placeholder/400/400" alt="Pakoras">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-title">
+                            <h3>Pakoras</h3>
+                            <span class="menu-item-price">€5.50</span>
+                        </div>
+                        <p class="menu-item-desc">Crispy, deep-fried vegetables in a chickpea flour batter. Served with mint chutney.</p>
+                        <div class="menu-item-actions">
+                            <button class="add-to-cart">Add to Cart</button>
+                            <div class="rating">★★★★☆ (62)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="location" class="container">
+        <h2>Find Us</h2>
+        <div class="location-info">
+            <div class="location-map">
+                <img src="/api/placeholder/600/400" alt="Location Map">
+            </div>
+            <div class="location-details">
+                <h3>Chai Junction</h3>
+                <p>Technical University of Munich</p>
+                <p>Garching, Germany</p>
+                <p>Opening Hours:</p>
+                <div class="hours-grid">
+                    <div>Mon - Fri:</div>
+                    <div>10:00 AM - 8:00 PM</div>
+                </div>
+                <div class="hours-grid">
+                    <div>Sat - Sun:</div>
+                    <div>11:00 AM - 6:00 PM</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="gallery" class="container">
+        <h2>Gallery</h2>
+        <div class="gallery">
+            <img src="/api/placeholder/400/400" alt="Gallery Image 1">
+            <img src="/api/placeholder/400/400" alt="Gallery Image 2">
+            <img src="/api/placeholder/400/400" alt="Gallery Image 3">
+            <img src="/api/placeholder/400/400" alt="Gallery Image 4">
+            <img src="/api/placeholder/400/400" alt="Gallery Image 5">
+            <img src="/api/placeholder/400/400" alt="Gallery Image 6">
+        </div>
+    </section>
+    
+    <section id="testimonials" class="testimonials">
+        <h2>What Our Customers Say</h2>
+        <div class="testimonial-slider">
+            <div class="testimonial">
+                <p class="testimonial-text">"The best chai I've ever had! The Masala Chai is absolutely delicious."</p>
+                <p class="testimonial-author">- John Doe</p>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"I love the variety of snacks available. The Samosa is my favorite!"</p>
+                <p class="testimonial-author">- Jane Smith</p>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"The location is perfect for a quick caffeine fix between classes."</p>
+                <p class="testimonial-author">- Michael Brown</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="social-proof" class="social-proof">
+        <h2>Our Community Loves Us</h2>
+        <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </section>
+    
+    <section id="app-download" class="app-download">
+        <h2>Download Our App</h2>
+        <p>Get the best of Chai Junction right on your mobile device.</p>
+        <div class="app-buttons">
+            <a href="#" class="app-button"><i class="fab fa-apple"></i> App Store</a>
+            <a href="#" class="app-button"><i class="fab fa-google-play"></i> Google Play</a>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>About Us</h3>
+                <ul class="footer-links">
+                    <li><a href="#about">Our Story</a></li>
+                    <li><a href="#location">Find Us</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Menu</h3>
+                <ul class="footer-links">
+                    <li><a href="#menu">All</a></li>
+                    <li><a href="#menu">Chai</a></li>
+                    <li><a href="#menu">Snacks</a></li>
+                    <li><a href="#menu">Seasonal</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li>Email: info@chaijunction.com</li>
+                    <li>Phone: +49 123 456789</li>
+                    <li>Address: Technical University of Munich, Garching, Germany</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-social">
+            <a href="#" class="footer-social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="footer-social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="footer-social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="footer-social-icon"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Chai Junction. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <div class="floating-cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count">0</span>
+    </div>
+</body>
+</html>

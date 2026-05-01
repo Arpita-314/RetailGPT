@@ -1,0 +1,106 @@
+import optuna
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torchvision import datasets, transforms, models
+from torch.utils.data import DataLoader, Subset
+import time
+
+# Set device
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# Dataset loading (CIFAR-10)
+transform = transforms.Compose([
+    transforms.Resize((32, 32)),
+    transforms.ToTensor(),
+])
+
+train_data = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+val_data = datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+
+# Use smaller subset for speed
+train_subset = Subset(train_data, range(1000))
+val_subset = Subset(val_data, range(500))
+
+train_loader = DataLoader(train_subset, batch_size=32, shuffle=True)
+val_loader = DataLoader(val_subset, batch_size=32, shuffle=False)
+
+# Fast model (low-fidelity): shallow CNN
+class FastCNN(nn.Module):
+    def __init__(self, n_filters):
+        super().__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(3, n_filters, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+            nn.Conv2d(n_filters, n_filters * 2, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.AdaptiveAvgPool2d(1)
+        )
+        self.fc = nn.Linear(n_filters * 2, 10)
+
+    def forward(self, x):
+        x = self.conv(x)
+        x = x.view(x.size(0), -1)
+        return self.fc(x)
+
+# Slow model (high-fidelity): pretrained ResNet18
+def get_slow_model():
+    model = models.resnet18(pretrained=False, num_classes=10)
+    model.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
+    model.maxpool = nn.Identity()
+    return model
+
+# Training and validation
+def train_and_evaluate(model, lr, epochs=3):
+    model = model.to(device)
+    optimizer = optim.Adam(model.parameters(), lr=lr)
+    criterion = nn.CrossEntropyLoss()
+
+    model.train()
+    for _ in range(epochs):
+        for inputs, targets in train_loader:
+            inputs, targets = inputs.to(device), targets.to(device)
+            optimizer.zero_grad()
+            loss = criterion(model(inputs), targets)
+            loss.backward()
+            optimizer.step()
+
+    model.eval()
+    correct, total = 0, 0
+    with torch.no_grad():
+        for inputs, targets in val_loader:
+            inputs, targets = inputs.to(device), targets.to(device)
+            outputs = model(inputs)
+            _, predicted = outputs.max(1)
+            correct += predicted.eq(targets).sum().item()
+            total += targets.size(0)
+
+    return correct / total  # accuracy
+
+# Optuna objective function
+def objective(trial):
+    # Shared hyperparameters
+    lr = trial.suggest_loguniform('lr', 1e-4, 1e-2)
+    n_filters = trial.suggest_int('n_filters', 16, 64)
+    use_high_fidelity = trial.suggest_categorical('fidelity', ['low', 'high'])
+
+    if use_high_fidelity == 'low':
+        model = FastCNN(n_filters=n_filters)
+        acc = train_and_evaluate(model, lr)
+        trial.set_user_attr("fidelity", "low")
+        return acc
+    else:
+        model = get_slow_model()
+        acc = train_and_evaluate(model, lr)
+        trial.set_user_attr("fidelity", "high")
+        return acc
+
+# Run optimization
+study = optuna.create_study(direction='maximize')
+study.optimize(objective, n_trials=20)
+
+# Best result
+print("Best Accuracy:", study.best_value)
+print("Best Params:", study.best_params)
+print("Fidelity Used:", study.best_trial.user_attrs["fidelity"])

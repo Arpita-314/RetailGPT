@@ -1,0 +1,9 @@
+# Dataset and tokenizer parameters
+sample_rate: 16000
+max_seq_length: 2048
+tokenizer:
+  name: "huggingface/bert-base-uncased"
+  special_tokens:
+    bos_token: "<s>"
+    eos_token: "</s>"
+shard_size: 1000

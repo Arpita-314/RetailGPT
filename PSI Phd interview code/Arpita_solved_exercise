@@ -1,0 +1,111 @@
+#!/usr/bin/env python3
+"""
+Ultimate Text File to JSON Parser
+Handles all specified cases including:
+- Key>value pairs with flexible spacing
+- Comma-separated pairs in single lines
+- Inline and full-line comments
+- Strict type validation
+"""
+
+import json
+import re
+import sys
+from collections import OrderedDict
+from typing import Dict, Any, Union
+
+class TextFileParser:
+    """
+    A parser for converting structured text files to JSON format.
+    
+    Supports:
+    - Key>value pairs with flexible spacing
+    - Comma-separated pairs in single lines
+    - Inline and full-line comments
+    - Strict type validation
+    """
+
+    @staticmethod
+    def parse_value(value_str: str) -> Union[str, int, bool]:
+        """
+        Parse a string value into its appropriate type.
+        
+        Args:
+            value_str: The string to parse
+            
+        Returns:
+            Union[str, int, bool]: The parsed value
+            
+        Raises:
+            ValueError: If the value format is invalid
+        """
+        value_str = value_str.strip()
+        
+        # Boolean cases (exact match required)
+        if value_str == "TRUE":
+            return True
+        if value_str == "FALSE":
+            return False
+        
+        # Integer validation (strict)
+        if re.fullmatch(r'^-?\d+$', value_str):
+            return int(value_str)
+        
+        # String validation (must be properly quoted with no internal quotes)
+        if len(value_str) >= 2 and value_str[0] == '"' and value_str[-1] == '"':
+            if '"' in value_str[1:-1]:
+                raise ValueError("String contains invalid double quotes")
+            return value_str[1:-1]
+        
+        raise ValueError(f"Invalid value format: '{value_str}'")
+
+    @staticmethod
+    def parse_file(file_path: str) -> Dict[str, Any]:
+        """Main parsing engine with line tracking"""
+        result = OrderedDict()
+        key_pattern = re.compile(r'^[a-zA-Z0-9_]+$')  # Pre-compiled pattern
+        
+        try:
+            with open(file_path, 'r') as f:
+                for line_num, line in enumerate(f, 1):
+                    # Process comments and clean line
+                    clean_line = line.split('$')[0].strip()
+                    if not clean_line:
+                        continue
+                    
+                    # Split and process all pairs in line
+                    for pair in filter(None, [p.strip() for p in clean_line.split(',')]):
+                        if '>' not in pair:
+                            raise ValueError(f"Line {line_num}: Missing '>' in pair '{pair}'")
+                        
+                        key, val = map(str.strip, pair.split('>', 1))
+                        
+                        # Validate key
+                        if not key_pattern.match(key):
+                            raise ValueError(f"Line {line_num}: Invalid key '{key}' - only alphanumeric and underscore allowed")
+                        if key in result:
+                            raise ValueError(f"Line {line_num}: Duplicate key '{key}'")
+                        
+                        # Parse value with context
+                        try:
+                            result[key] = TextFileParser.parse_value(val)
+                        except ValueError as e:
+                            raise ValueError(f"Line {line_num}: Value error in '{val}' - {str(e)}")
+        
+        except IOError as e:
+            raise IOError(f"File error: {str(e)}")
+        
+        return result
+
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python parser.py <input_file>", file=sys.stderr)
+        sys.exit(1)
+    
+    try:
+        data = TextFileParser.parse_file(sys.argv[1])
+        print(json.dumps(data, indent=3, ensure_ascii=False))
+    except Exception as e:
+        print(f"ERROR: {str(e)}", file=sys.stderr)
+        sys.exit(1)
+

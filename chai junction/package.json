@@ -1,0 +1,11 @@
+{
+  "name": "chai-junction",
+  "version": "1.0.0",
+  "description": "Chai Junction - Authentic Indian Chai & Snacks at TUM",
+  "scripts": {
+    "start": "cd frontend && npm start",
+    "install-all": "npm install && cd frontend && npm install"
+  },
+  "author": "",
+  "license": "ISC"
+} 

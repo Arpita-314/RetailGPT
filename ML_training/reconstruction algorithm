@@ -1,0 +1,42 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.fftpack import fftshift, fft2
+
+# Create a synthetic object (amplitude and phase)
+def create_object(size=256):
+    obj = np.ones((size, size), dtype=np.complex64)
+    obj[80:180, 100:200] *= np.exp(1j * np.pi * 0.5)  # Phase shift region
+    obj[120:140, 130:160] *= 0.5  # Absorption feature
+    return obj
+
+# Generate Gaussian probe
+def gaussian_probe(size=64, sigma=15):
+    x, y = np.meshgrid(np.linspace(-1, 1, size), np.linspace(-1, 1, size))
+    probe = np.exp(- (x**2 + y**2) / (2 * sigma**2))
+    return probe
+
+# Simulate diffraction patterns (Fourier transform of probe-object multiplication)
+def generate_diffraction_patterns(obj, probe, step=20, window_size=64):
+    size = obj.shape[0]
+    positions = [(i, j) for i in range(0, size - window_size, step) for j in range(0, size - window_size, step)]
+    patterns = []
+    
+    for (x, y) in positions:
+        sub_obj = obj[x:x+window_size, y:y+window_size] * probe
+        fft_pattern = np.abs(fftshift(fft2(sub_obj)))**2  # Intensity-only
+        patterns.append(fft_pattern)
+    
+    return np.array(patterns), positions
+
+# Generate data
+obj = create_object()
+probe = gaussian_probe()
+patterns, positions = generate_diffraction_patterns(obj, probe)
+
+# Display a sample diffraction pattern
+plt.imshow(np.log1p(patterns[0]), cmap='inferno')
+plt.title("Simulated Ptychographic Diffraction Pattern")
+
+plt.colorbar()
+plt.show()
+

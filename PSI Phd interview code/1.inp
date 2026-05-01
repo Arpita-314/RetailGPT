@@ -1,0 +1,6 @@
+string > "value"
+boolean > TRUE
+integer > -12
+another_boolean>FALSE
+another_integer>37
+
